@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
 import com.jewel.dbmanager.adapter.AdPerson;
 import com.jewel.dbmanager.model.MPerson;
 
@@ -31,14 +32,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .createTable(MPerson.class)
                 .build();
 
-        MPerson person=new MPerson();
-        person.setName("Rahim");
-        person.setAge(23);
 
-        DBManager.getInstance().addData(person);
         init();
+        MPerson person = new MPerson();
+        person.setName("Rahim");
+        person.setAge(25);
+        persons.add(person);
+
+        person = new MPerson();
+        person.setName("rakib");
+        person.setAge(23);
+        persons.add(person);
+
+        person = new MPerson();
+        person.setName("mas");
+        person.setAge(27);
+        persons.add(person);
+
+        DBManager.getInstance().addData(persons);
         prepareList();
         persons = DBManager.getInstance().getData(MPerson.class);
+        //convert json data to string
+        String data = new Gson().toJson(persons);
+        Log.e("json", data);
         Log.e("TE", "s:" + persons.size());
 
     }
@@ -116,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void prepareList() {
 
-        persons = DBManager.getInstance().getData(MPerson.class,new Search("age","21","<="));
+        persons = DBManager.getInstance().getData(MPerson.class, new Search("age", "21", "<="));
 
 
         adapter.addData(persons);
